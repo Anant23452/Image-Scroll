@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Animated-Stuff </title>
+</head>
+<body>
+    <div class="w-full   bg-zinc-900">
+        <div class="parent relative top-0 left-0 w-full h-[1000vh] bg-zinc-700">
+            <div class="w-full sticky canav top-0 left-0 h-screen ">
+                <canvas class="w-full h-screen" id="frame"></canvas>
+                <div class="absolute animate1 z-[2] text-white bottom-10 w-1/2 left-10">
+                    <h1 class="leading-20 font-[100] text-3xl">
+                        &copy;2024 DOZE STD
+                    </h1>
+                    <h1 class="text-3xl">SHAPING BRANDS -CRAFTING MOTION</h1>
+                </div>
+                <div class="animate2 absolute flex z-[2] text-white bottom-10 w-1/2 right-10 text-right opacity-0">
+                    <h1 class="leading-20 font-[100] uppercase text-6xl">
+                        Transforming Visions
+                    </h1>
+                    <h class="text-xl w-1/2">Building identity and inspiring actions, Sculptiong digital experiencess</h>
+                </div>
+                <div class="animate3 absolute flex z-[2] text-white  w-1/2 top-1/2 left-1/2 right-10 text-right opacity-0 -translate-x-1/2 -translate--1/2">
+                    <h1 class="leading-20 font-[100] uppercase text-7xl text-black">
+                       Annt
+                    </h1>
+                    <h class="text-xl w-1/2">Lorem ipsum dolor sit amet consectetur adipisicing elit.</h>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        const canvas = document.querySelector("canvas");
+       const context = canvas.getContext('2d');
+        const frame ={
+            currentIndex: 0,
+            maxIndex: 382,
+        }
+        let imageLoader =0;
+        const images=[];
+        function preloadImg(){
+            for(var i=1;i<=frame.maxIndex;i++){
+                const imageUrl=`./images/frame_${i.toString().padStart(4,"0")}.jpeg`;
+                // console.log(imageUrl);
+                const img = new Image();
+                img.src = imageUrl; 
+                // console.log(img);
+                img.onload =()=>{
+                    imageLoader++;
+                    if(imageLoader===frame.maxIndex){
+                        console.log("All images loaded");
+                        loadImage(frame.currentIndex);
+                        startAnimation();
+                        
+                    }
+                }
+                images.push(img)
+            }
+        };
+           
+         
+        function loadImage(index){
+        if(index>=0 && index<=frame.maxIndex){
+            const img =images[index];
+            // console.log(canvas);
+            canvas.width =window.innerWidth;
+            canvas.height = window.innerHeight;
+            // aspect ration select karne ke liye  
+            const scaleX =canvas.width/img.width;
+            const scaleY = canvas.height/img.height;
+            const scale =Math.max(scaleX,scaleY);
+            const newWidth =img.width*scaleX;
+            const newHeight =img.height*scaleY;
+            const offsetX =(canvas.width-newWidth)/2;
+            const offsetY =(canvas.height-newHeight)/2;
+            context.clearRect(0,0,canvas.width,canvas.height);
+            context.imageSmoothingQuality="high";
+            context.imageSmoothingEnabled=true;
+            context.drawImage(img,offsetX,offsetY,newWidth,newHeight);
+            frames.currentIndex =index;
+
+      }
+    }
+    function startAnimation() {
+
+
+var tl =gsap.timeline({
+    scrollTrigger:{
+        trigger:".parent",
+        start:"top top",
+        scrub:2,
+        end:"bottom bottom",
+        // markers:true,
+    }
+});
+function updateFrame(index){
+    return{
+        currentIndex:index,
+    onUpdate:function(){
+        loadImage(Math.floor(frame.currentIndex));
+    }
+    }
+}
+tl
+.to(frame,updateFrame(50),"a")
+.to(".animate1",{
+    opacity:0,
+    ease:"linear"
+},"a")
+.to(frame,updateFrame(80),"second")
+.to(".animate2",{
+    opacity:1,
+    ease:"linear"
+},"second")
+.to(frame,updateFrame(120),"third")
+.to(".animate2",{
+    opacity:1,
+    ease:"linear"
+},"third")
+.to(frame,updateFrame(140),"fourth")
+.to(".animate2",{
+    opacity:0,
+    ease:"linear"
+},"fourth")
+
+.to(frame,updateFrame(170),"five")
+.to(".animate3",{
+    opacity:1,
+    ease:"linear"
+},"five")
+.to(frame,updateFrame(200),"six")
+.to(".animate3",{
+    opacity:1,
+    ease:"linear"
+},"six")
+.to(frame,updateFrame(230),"seven")
+.to(".animate3",{
+    opacity:0,
+    ease:"linear"
+},"seven")
+.to(frame,updateFrame(380),"eight")
+
+
+}
+        
+     
+      
+  
+   
+    
+ window.addEventListener("resize",function(){
+    loadImage(Math.floor(frame.currentIndex))
+ })
+
+    preloadImg();
+
+          
+            
+            
+    </script>
+</body>
+</html>
